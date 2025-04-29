@@ -5,7 +5,8 @@ export function initializeItemTable(db: Database) {
     const queryString =`CREATE TABLE IF NOT EXISTS item(
         id INTEGER PRIMARY KEY,
         content TEXT NOT NULL,
-        kind TEXT NOT NULL
+        kind TEXT NOT NULL,
+        archived BOOLEAN DEFAULT FALSE
     )`;
     const query = db.prepare(queryString);
     query.run();
@@ -44,4 +45,10 @@ export function deleteItem(db: Database, content: string) {
     const queryString = `DELETE FROM item WHERE content = ?`;
     const query = db.query(queryString);
     query.run(content);
+}
+
+export function archiveItems(db: Database) {
+    const queryString = `UPDATE item SET archived = TRUE WHERE kind = "memo" OR kind = "done"`;
+    const query = db.query(queryString);
+    query.run();
 }
