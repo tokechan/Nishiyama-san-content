@@ -2,9 +2,10 @@ import { Database } from "bun:sqlite";
 import { 
     createItem, 
     getItems,
+    deleteItem,
     initializeItemTable,
     updateTodoToDone,
- } from "./db";
+    } from "./db";
 import { formatToItem } from "./format";
 
 const db = new Database("sqlite.db");
@@ -28,6 +29,9 @@ if (Bun.argv.length === 4) {
         case "done":
             updateTodoToDone(db, content);
             //Todo: task done write method
+            break;
+        case "drop":
+            deleteItem(db, content);
             break;
         default:
             throw new Error("不正なコマンドです");
