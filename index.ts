@@ -5,6 +5,7 @@ import {
     deleteItem,
     initializeItemTable,
     updateTodoToDone,
+    archiveItems,
     } from "./db";
 import { formatToItem } from "./format";
 
@@ -20,18 +21,25 @@ if (Bun.argv.length === 4) {
     switch (command) {
         case "memo":
             createItem(db, content, "memo");
-            //Todo: memo add write method
             break;
         case "todo":
-            createItem(db, content, "todo");
-            //Todo: task add write method
+            createItem(db, content, "todo");           
             break;
         case "done":
             updateTodoToDone(db, content);
-            //Todo: task done write method
             break;
         case "drop":
             deleteItem(db, content);
+            break;
+        default:
+            throw new Error("不正なコマンドです");
+    }
+} else if (Bun.argv.length === 3) {
+    const command: string = Bun.argv.pop() ?? "";
+
+    switch (command) {
+        case "trim":
+            archiveItems(db);
             break;
         default:
             throw new Error("不正なコマンドです");
@@ -44,3 +52,4 @@ if (Bun.argv.length === 4) {
 } else {
     throw new Error("コマンドライン引数の数が多すぎます");
 }
+db.close();
