@@ -1,0 +1,10 @@
+Bunをインストール
+プロジェクトを作成
+ファイル書き出し
+ファイル読み込み
+
+
+Tue Apr 29 2025 19:23:45 GMT+0900 (Japan Standard Time)
+Tue Apr 29 2025 19:24:50 GMT+0900 (Japan Standard Time)
+hello
+こんにちは
