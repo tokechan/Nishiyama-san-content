@@ -1,26 +1,32 @@
-import { formatToItem } from "./format";
-//output.txtをファイルとして取得し、テキストを読み出す
-const file = Bun.file("output.txt");
-const source = await file.text();
+import { Database } from "bun:sqlite";
+import { createItem,  initializeItemTable } from "./db";
 
-if (Bun.argv.length === 3){
-    //コマンドライン引数の最後の文字列を取得する
-    const memo: string = Bun.argv.pop() ?? "";
-    const item: string = formatToItem(memo);
+const db = new Database("sqlite.db");
 
-    //ファイルに元のテキストと改行、日時を書き込む
-    const writer = file.writer();
-    writer.write(source);
-    writer.write("\n");
-    writer.write(item);
-    writer.end();
+initializeItemTable(db);
 
-    //ファイルから再びテキストを読み出す
-    const  result = await file.text();
-    console.log(result);
+if (Bun.argv.length === 4) {
+    //コマンドライン引数の最後２つの文字列を取得する
+    const content: string = Bun.argv.pop() ?? "";
+    const command: string = Bun.argv.pop() ?? "";
+    
+    switch (command) {
+        case "memo":
+            createItem(db, content, "memo");
+            //Todo: memo add write method
+            break;
+        case "todo":
+            createItem(db,content, "todo");
+            //Todo: task add write method
+            break;
+        case "done":
+            //Todo: task done write method
+            break;
+        default:
+            throw new Error("不正なコマンドです");
+    }
 } else if (Bun.argv.length === 2) {
-    console.log(source);
+    //console.log(source);
 } else {
-    throw new  Error("追加のコマンドライン引数は１つまでです。");
+    throw new Error("コマンドライン引数の数が多すぎます");
 }
-
